@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
@@ -103,7 +105,8 @@ class ProfilePage extends GetView<ProfileController> {
                         "https://www.tutorialspoint.com/flutter/flutter_tutorial.pdf");
                   }),
                   iconTileProfile(ic_webpage, "Open Webpage", () {
-                    controller.onOpenWebPageClick();
+                    controller.onOpenWebPageClick(
+                        "https://www.youtube.com/watch?v=lpnKWK-KEYs");
                   }),
                   const SizedBox(height: 16),
                   Container(
@@ -167,7 +170,102 @@ class ProfilePage extends GetView<ProfileController> {
             textColor: red600,
             textLabel: "Sign Out",
             onClick: () {
-              controller.doLogout();
+              Get.bottomSheet(
+                Container(
+                  height: 420,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(18))),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Confirmation",
+                              style: TextStyle(
+                                color: gray900,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                height: 1.2,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => Get.back(),
+                              child: Icon(
+                                Icons.close,
+                                size: 24,
+                                color: gray900,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          width: 300,
+                          height: 200,
+                          child: SvgPicture.asset(
+                            svg_confirmation,
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Are you sure\nyou want to log out of your account?",
+                        style: TextStyle(
+                            fontSize: 14,
+                            height: 1.5,
+                            fontWeight: FontWeight.w700,
+                            color: gray900),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: PrimaryButton(
+                                  title: "Cancel",
+                                  isDisabled: true,
+                                  textColor: white,
+                                  onClick: () {
+                                    Get.back();
+                                  },
+                                )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: PrimaryButton(
+                                  title: "Sign Out",
+                                  isDisabled: false,
+                                  onClick: () {
+                                    controller.doLogout();
+                                  },
+                                ))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
             },
           ),
         ),

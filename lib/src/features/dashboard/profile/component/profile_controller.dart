@@ -112,25 +112,9 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Future<bool> requestPermissions() async {
-  //   if (Platform.isAndroid) {
-  //     var status = await Permission.storage.request();
-  //     if (Platform.isAndroid) {
-  //       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  //       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  //       if (androidInfo.version.sdkInt >= 33) {
-  //         return true;
-  //       }
-  //     }
-  //     return status.isGranted;
-  //   } else if (Platform.isIOS) {
-  //     var status = await Permission.photos.request();
-  //     return status.isGranted;
-  //   }
-  //   return false;
-  // }
-
-  onOpenWebPageClick() {}
+  onOpenWebPageClick(String url) {
+    Get.toNamed(RouteName.webPage, arguments: url);
+  }
 
   void doLogout() async {
     await _userRepository.logout();

@@ -2,6 +2,8 @@ import 'package:entrance_test/app/routes/route_name.dart';
 import 'package:entrance_test/src/features/dashboard/component/dashboard_binding.dart';
 import 'package:entrance_test/src/features/dashboard/dashboard_page.dart';
 import 'package:entrance_test/src/features/dashboard/profile/edit/edit_profile_page.dart';
+import 'package:entrance_test/src/features/dashboard/profile/webPage/component/web_binding.dart';
+import 'package:entrance_test/src/features/dashboard/profile/webPage/web_page.dart';
 import 'package:entrance_test/src/features/splashScreen/component/splashscreen_binding.dart';
 import 'package:entrance_test/src/features/splashScreen/splashscreen_page.dart';
 import 'package:get/get.dart';
@@ -31,6 +33,11 @@ class AppRoute {
       name: RouteName.editProfile,
       page: () => const EditProfilePage(),
       binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: RouteName.webPage,
+      page: () => WebPage(),
+      binding: WebBinding(),
     ),
   ];
 }

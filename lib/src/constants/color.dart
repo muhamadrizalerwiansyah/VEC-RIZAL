@@ -13,6 +13,7 @@ const red500 = Color(0xffFF3B3B);
 const red600 = Color(0xffE83636);
 const green50 = Color(0xffE6F9F1);
 const green600 = Color(0xff06C270);
+const grayText = Color(0xFF62717D);
 
 const gradientColorRedWhite = LinearGradient(
     begin: Alignment.bottomCenter,
@@ -21,3 +22,6 @@ const gradientColorRedWhite = LinearGradient(
       Color.fromARGB(255, 216, 255, 246),
       red500,
     ]);
+
+TextStyle boldGreyText =
+    TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.grey);
