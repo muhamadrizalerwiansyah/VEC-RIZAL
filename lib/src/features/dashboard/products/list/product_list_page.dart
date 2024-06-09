@@ -103,20 +103,19 @@ class ProductListPage extends GetWidget<ProductListController> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           InkWell(
-                            onTap: () => {controller.setFavorite(product)},
-                            child: Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Obx(
-                                    () => Image.asset(
-                                  product.isFavorite
-                                      ? ic_favorite_filled
-                                      : ic_favorite_empty,
-                                  width: 24,
-                                  height: 24,
+                              onTap: () => {controller.setFavorite(product)},
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Obx(
+                                  () => Image.asset(
+                                    product.isFavorite
+                                        ? ic_favorite_filled
+                                        : ic_favorite_empty,
+                                    width: 24,
+                                    height: 24,
+                                  ),
                                 ),
-                              ),
-                            )
-                          )
+                              ))
                         ],
                       ),
                     ],

@@ -3,8 +3,10 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:entrance_test/src/constants/image.dart';
+import 'package:entrance_test/src/widgets/empty_list_state_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../../constants/color.dart';
@@ -42,14 +44,21 @@ class EditProfilePage extends GetView<EditProfileController> {
                 const SizedBox(height: 24),
                 InkWell(
                   onTap: () {
-                    controller.changeImage();
+                    showOptionsDialog(context);
                   },
                   child: SizedBox(
                     width: 100,
                     height: 100,
                     child: ClipOval(
                         child: Obx(() => Stack(children: [
-                              if (controller.isLoadPictureFromPath)
+                              if (controller.imageFile.value != null)
+                                Image.file(
+                                  controller.imageFile.value!,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                )
+                              else if (controller.isLoadPictureFromPath)
                                 Image.file(
                                   width: 100,
                                   height: 100,
@@ -158,6 +167,21 @@ class EditProfilePage extends GetView<EditProfileController> {
                         ),
                       ),
                       controller: controller.etFullName,
+                    ),
+                    const SizedBox(height: 5),
+                    Obx(
+                      () => (!controller.statusFullname.value)
+                          ? SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                controller.noteFullName.value,
+                                style: const TextStyle(
+                                    color: red500,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            )
+                          : Container(),
                     ),
                   ],
                 ),
@@ -301,6 +325,21 @@ class EditProfilePage extends GetView<EditProfileController> {
                       ),
                       controller: controller.etEmail,
                     ),
+                    const SizedBox(height: 5),
+                    Obx(
+                      () => (!controller.statusEmail.value)
+                          ? SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                controller.noteEmail.value,
+                                style: const TextStyle(
+                                    color: red500,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            )
+                          : Container(),
+                    )
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -365,6 +404,10 @@ class EditProfilePage extends GetView<EditProfileController> {
                             keyboardType: const TextInputType.numberWithOptions(
                                 signed: false, decimal: false),
                             textAlign: TextAlign.center,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                              CustomPhoneNumberFormatter(),
+                            ],
                             style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -420,6 +463,10 @@ class EditProfilePage extends GetView<EditProfileController> {
                             keyboardType: const TextInputType.numberWithOptions(
                                 signed: false, decimal: false),
                             textAlign: TextAlign.center,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                              CustomPhoneNumberFormatter(),
+                            ],
                             style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -560,4 +607,33 @@ class EditProfilePage extends GetView<EditProfileController> {
               ),
             )),
       );
+
+  Future<void> showOptionsDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Options"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  GestureDetector(
+                    child: const Text("Capture Image From Camera"),
+                    onTap: () {
+                      controller.changeImage(context, 0);
+                    },
+                  ),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  GestureDetector(
+                    child: const Text("Take Image From Gallery"),
+                    onTap: () {
+                      controller.changeImage(context, 1);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }

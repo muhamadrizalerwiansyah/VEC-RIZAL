@@ -1,3 +1,4 @@
+import 'package:entrance_test/src/widgets/empty_list_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -116,29 +117,168 @@ class LoginPage extends GetView<LoginController> {
                       fillColor: white,
                       filled: true,
                       hintText: 'Phone Number',
-                      prefixIcon: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(width: 6),
-                            Text(
-                              '+62',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: gray900),
-                            ),
-                            SizedBox(width: 12),
-                            SizedBox(
-                              width: 1.5,
-                              height: 48,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(color: gray100),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                        child: InkWell(
+                          onTap: () {
+                            Get.bottomSheet(
+                              Container(
+                                height: 320,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(18))),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            "Country",
+                                            style: TextStyle(
+                                              color: gray900,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.2,
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () => Get.back(),
+                                            child: const Icon(
+                                              Icons.close,
+                                              size: 24,
+                                              color: gray900,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Obx(
+                                      () => ItemSelectDayWidget(
+                                          size: size,
+                                          label: "Indonesia (+62)",
+                                          status:
+                                              controller.country.value == "62"
+                                                  ? true
+                                                  : false,
+                                          tap: () async {
+                                            controller.country.value = "62";
+                                            Get.back();
+                                          }),
+                                    ),
+                                    Container(
+                                      width: size.width,
+                                      height: 0.5,
+                                      color: gray600,
+                                    ),
+                                    Obx(
+                                      () => ItemSelectDayWidget(
+                                          size: size,
+                                          label: "Malaysia (+60)",
+                                          status:
+                                              controller.country.value == "60"
+                                                  ? true
+                                                  : false,
+                                          tap: () async {
+                                            controller.country.value = "60";
+                                            Get.back();
+                                          }),
+                                    ),
+                                    Container(
+                                      width: size.width,
+                                      height: 0.5,
+                                      color: gray600,
+                                    ),
+                                    Obx(
+                                      () => ItemSelectDayWidget(
+                                          size: size,
+                                          label: "Australia (+61)",
+                                          status:
+                                              controller.country.value == "61"
+                                                  ? true
+                                                  : false,
+                                          tap: () async {
+                                            controller.country.value = "61";
+                                            Get.back();
+                                          }),
+                                    ),
+                                    Container(
+                                      width: size.width,
+                                      height: 0.5,
+                                      color: gray600,
+                                    ),
+                                    Obx(
+                                      () => ItemSelectDayWidget(
+                                          size: size,
+                                          label: "Philipina (+63)",
+                                          status:
+                                              controller.country.value == "63"
+                                                  ? true
+                                                  : false,
+                                          tap: () async {
+                                            controller.country.value = "63";
+                                            Get.back();
+                                          }),
+                                    ),
+                                    Container(
+                                      width: size.width,
+                                      height: 0.5,
+                                      color: gray600,
+                                    ),
+                                    Obx(
+                                      () => ItemSelectDayWidget(
+                                          size: size,
+                                          label: "Singapura (+65)",
+                                          status:
+                                              controller.country.value == "65"
+                                                  ? true
+                                                  : false,
+                                          tap: () async {
+                                            controller.country.value = "65";
+                                            Get.back();
+                                          }),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(width: 6),
+                              Obx(
+                                () => Text(
+                                  '+${controller.country.value}',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: gray900),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              const SizedBox(
+                                width: 1.5,
+                                height: 48,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(color: gray100),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -151,7 +291,7 @@ class LoginPage extends GetView<LoginController> {
                             width: size.width,
                             child: Text(
                               controller.notePhone.value,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: red500,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500),
@@ -247,7 +387,7 @@ class LoginPage extends GetView<LoginController> {
                             width: size.width,
                             child: Text(
                               controller.notePassword.value,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: red500,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500),
@@ -286,15 +426,4 @@ class LoginPage extends GetView<LoginController> {
           ),
         ),
       ));
-}
-
-class CustomPhoneNumberFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.text.startsWith('0')) {
-      return oldValue;
-    }
-    return newValue;
-  }
 }

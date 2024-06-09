@@ -20,15 +20,15 @@ class SplashscreenController extends GetxController {
     try {
       var data = await _userRepository.getUser();
       Timer(const Duration(seconds: 3), () async {
-        if (data.data != null) {
+        if (data.status == 0) {
           Get.offAllNamed(RouteName.dashboard);
         } else {
-          Get.offNamed(RouteName.login);
+          Get.offNamed(RouteName.onboarding);
         }
       });
     } catch (e) {
       Timer(const Duration(seconds: 3), () async {
-        Get.offNamed(RouteName.login);
+        Get.offNamed(RouteName.onboarding);
       });
     }
   }

@@ -27,6 +27,10 @@ class UserRepository {
     await _local.remove(LocalDataKey.token);
   }
 
+  Future<String> getToken() async {
+    return _local.read(LocalDataKey.token);
+  }
+
   Future<UserResponseModel> getUser() async {
     try {
       final responseJson = await _client.get(

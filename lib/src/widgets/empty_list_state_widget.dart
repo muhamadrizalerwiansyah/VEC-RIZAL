@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../constants/color.dart';
 import '../constants/icon.dart';
@@ -47,5 +48,16 @@ class EmptyListStateWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomPhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.startsWith('0')) {
+      return oldValue;
+    }
+    return newValue;
   }
 }

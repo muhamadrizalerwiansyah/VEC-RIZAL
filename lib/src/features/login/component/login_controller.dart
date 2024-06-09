@@ -26,6 +26,7 @@ class LoginController extends GetxController {
   RxBool statusSubmit = false.obs;
   final notePhone = "".obs;
   final notePassword = "".obs;
+  final country = "62".obs;
 
   void doLogin() async {
     statusSubmit.value = true;
@@ -39,7 +40,7 @@ class LoginController extends GetxController {
       final response = await dio.post("${Endpoint.baseUrl}/sign-in", data: {
         "phone_number": etPhone.text,
         "password": etPassword.text,
-        "country_code": "62",
+        "country_code": country.value,
       });
       if (response.statusCode == 200) {
         await _userRepository.login(response.data["data"]["token"]);

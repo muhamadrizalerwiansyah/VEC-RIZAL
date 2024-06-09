@@ -66,6 +66,60 @@ class ButtonIcon extends StatelessWidget {
   }
 }
 
+class ItemSelectDayWidget extends StatelessWidget {
+  const ItemSelectDayWidget({
+    super.key,
+    required this.size,
+    required this.label,
+    required this.status,
+    required this.tap,
+  });
+
+  final Size size;
+  final String label;
+  final bool status;
+  final Future<void> Function() tap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: InkWell(
+        onTap: tap,
+        child: SizedBox(
+          width: size.width,
+          height: 45,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: gray900,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  height: 1.2,
+                ),
+              ),
+              Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: white,
+                    border: Border.all(
+                        width: status ? 4 : 2,
+                        color: status ? primary : gray500)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class PrimaryButton extends StatelessWidget {
   var onClick;
   bool isDisabled;
@@ -111,60 +165,6 @@ class PrimaryButton extends StatelessWidget {
               color: isDisabled ? grayText : white,
             )
         ],
-      ),
-    );
-  }
-}
-
-class ItemSelectDayWidget extends StatelessWidget {
-  const ItemSelectDayWidget({
-    super.key,
-    required this.size,
-    required this.label,
-    required this.status,
-    required this.tap,
-  });
-
-  final Size size;
-  final String label;
-  final bool status;
-  final Future<void> Function() tap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: InkWell(
-        onTap: tap,
-        child: SizedBox(
-          width: size.width,
-          height: 45,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  color: gray900,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  height: 1.2,
-                ),
-              ),
-              Container(
-                width: 22,
-                height: 22,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: white,
-                    border: Border.all(
-                        width: status ? 4 : 2,
-                        color: status ? primary : gray600)),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

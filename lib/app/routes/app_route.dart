@@ -4,6 +4,8 @@ import 'package:entrance_test/src/features/dashboard/dashboard_page.dart';
 import 'package:entrance_test/src/features/dashboard/profile/edit/edit_profile_page.dart';
 import 'package:entrance_test/src/features/dashboard/profile/webPage/component/web_binding.dart';
 import 'package:entrance_test/src/features/dashboard/profile/webPage/web_page.dart';
+import 'package:entrance_test/src/features/onBoarding/component/onboarding_binding.dart';
+import 'package:entrance_test/src/features/onBoarding/onboarding_page.dart';
 import 'package:entrance_test/src/features/splashScreen/component/splashscreen_binding.dart';
 import 'package:entrance_test/src/features/splashScreen/splashscreen_page.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,11 @@ class AppRoute {
       name: RouteName.splashscreen,
       page: () => const SplashscreenPage(),
       binding: SplashscreenBinding(),
+    ),
+    GetPage(
+      name: RouteName.onboarding,
+      page: () => const OnboardingPage(),
+      binding: OnboardingBinding(),
     ),
     GetPage(
       name: RouteName.login,

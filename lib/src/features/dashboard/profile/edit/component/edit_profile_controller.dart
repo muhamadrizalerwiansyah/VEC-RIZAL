@@ -1,18 +1,35 @@
+// ignore_for_file: unused_local_variable
+
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:entrance_test/src/constants/endpoint.dart';
+import 'package:entrance_test/src/features/dashboard/profile/component/profile_controller.dart';
 import 'package:entrance_test/src/repositories/user_repository.dart';
 import 'package:entrance_test/src/utils/string_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../utils/date_util.dart';
 import '../../../../../utils/networking_util.dart';
 import '../../../../../widgets/snackbar_widget.dart';
+import 'package:dio/dio.dart' as d;
 
 class EditProfileController extends GetxController {
+  final dio = d.Dio();
+  d.Dio dioClient = d.Dio();
+
   final UserRepository _userRepository;
 
   EditProfileController({
     required UserRepository userRepository,
   }) : _userRepository = userRepository;
+
+  final profileController = Get.find<ProfileController>();
 
   final etFullName = TextEditingController();
   final etPhoneNumber = TextEditingController();
@@ -42,6 +59,12 @@ class EditProfileController extends GetxController {
   bool get isGenderFemale => _isGenderFemale.value;
 
   DateTime birthDate = DateTime.now();
+
+  final noteFullName = "".obs;
+  final noteEmail = "".obs;
+  RxBool statusFullname = true.obs;
+  RxBool statusEmail = true.obs;
+  Rx<File?> imageFile = Rx<File?>(null);
 
   @override
   void onInit() {
@@ -74,7 +97,8 @@ class EditProfileController extends GetxController {
 
         etBirthDate.text = '';
         if (localUser.dateOfBirth.isNullOrEmpty == false) {
-          birthDate = DateUtil.getDateFromShortServerFormat(localUser.dateOfBirth!);
+          birthDate =
+              DateUtil.getDateFromShortServerFormat(localUser.dateOfBirth!);
           etBirthDate.text = DateUtil.getBirthDate(birthDate);
         }
       } else {
@@ -86,8 +110,29 @@ class EditProfileController extends GetxController {
     }
   }
 
-  void changeImage() async {
+  void changeImage(context, int value) async {
     //TODO: Implement change profile image
+    try {
+      if (value == 0) {
+        final image = await ImagePicker().pickImage(source: ImageSource.camera);
+        if (image == null) return;
+        final imageTemporary = File(image.path);
+
+        imageFile.value = imageTemporary;
+        update();
+        Get.back();
+      } else {
+        final image =
+            await ImagePicker().pickImage(source: ImageSource.gallery);
+        if (image == null) return;
+        final imageTemporary = File(image.path);
+        imageFile.value = imageTemporary;
+        update();
+        Get.back();
+      }
+    } on PlatformException {
+      Get.back();
+    }
   }
 
   void onChangeGender(bool isFemale) {
@@ -106,5 +151,72 @@ class EditProfileController extends GetxController {
 
   void saveData() async {
     //TODO: Implement edit user API
+    if (!isValidForm()) {
+      return;
+    }
+    try {
+      await EasyLoading.show(
+        status: 'Loading...',
+        maskType: EasyLoadingMaskType.custom,
+      );
+      final token = await _userRepository.getToken();
+      d.MultipartFile? img;
+      if (imageFile.value != null) {
+        img = await d.MultipartFile.fromFile(
+          imageFile.value!.path,
+          filename: imageFile.value!.path.split('/').last,
+        );
+      }
+      var data = d.FormData.fromMap({
+        "name": etFullName.text,
+        "email": etEmail.text,
+        "gender": _gender.value,
+        "date_of_birth": DateFormat('yyyy-MM-dd').format(birthDate),
+        "height": etHeight.text,
+        "weight": etWeight.text,
+        "profile_picture": img,
+        "_method": "PUT",
+      });
+      final response = await dio.post("${Endpoint.baseUrl}/user/profile",
+          data: data,
+          options: Options(headers: {'Authorization': 'Bearer ${token}'}));
+
+      if (response.statusCode == 200) {
+        EasyLoading.showSuccess("Success!");
+        profileController.loadUserFromServer();
+        Get.back();
+      } else {
+        EasyLoading.showInfo("Failed!");
+      }
+    } catch (e) {
+      EasyLoading.showError("Error!");
+    }
+  }
+
+  bool isValidForm() {
+    if (etFullName.text.isEmpty) {
+      noteFullName.value = "Name must be entered";
+      statusFullname.value = false;
+      return false;
+    } else {
+      statusFullname.value = true;
+    }
+    if (etEmail.text.isEmpty) {
+      noteEmail.value = "Email must be entered";
+      statusEmail.value = false;
+      return false;
+    } else {
+      String pattern =
+          r'^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-]?[a-zA-Z0-9]+)*(\.[a-zA-Z]{2,})+$';
+      RegExp regex = RegExp(pattern);
+      if (!regex.hasMatch(etEmail.text)) {
+        noteEmail.value = "Enter a valid email";
+        statusEmail.value = false;
+        return false;
+      } else {
+        statusEmail.value = true;
+      }
+    }
+    return true;
   }
 }
